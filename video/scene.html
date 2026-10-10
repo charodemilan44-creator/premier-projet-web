@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Akadi Motion</title>
+<style>
+  :root{
+    --orange:#F25C05; --orange2:#ED6010; --red:#D7092D; --peach:#FDEBE2;
+    --ink:#1B1B1B; --grey:#F6F6F6; --black:#0B0B0B; --green:#8DC63F; --yellow:#F5D21E; --sep:#C9F2C2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1920px;height:1080px;overflow:hidden;background:var(--black);font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+  #stage{position:relative;width:1920px;height:1080px;overflow:hidden}
+  .scene{position:absolute;inset:0;overflow:hidden;visibility:hidden}
+  .abs{position:absolute}
+  img{display:block}
+  .cover{width:100%;height:100%;object-fit:cover}
+  .dots{background-image:radial-gradient(rgba(242,92,5,.16) 2px,transparent 2.5px);background-size:44px 44px}
+
+  /* ---------- intro ---------- */
+  #s1{background:radial-gradient(1200px 800px at 50% 50%,#1d1209 0%,var(--black) 60%)}
+  #s1 .glow{left:960px;top:540px;width:1400px;height:1400px;margin:-700px 0 0 -700px;border-radius:50%;
+    background:radial-gradient(circle,rgba(242,92,5,.35),rgba(242,92,5,0) 60%)}
+  #ring{left:960px;top:540px;width:560px;height:560px;margin:-280px 0 0 -280px}
+  #s1 .logo{left:960px;top:540px;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;
+    box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 6px rgba(255,255,255,.04)}
+  #word{left:0;top:0;height:1080px;display:flex;align-items:center;gap:6px}
+  #word span{display:inline-block;font-weight:900;font-size:250px;letter-spacing:-6px;color:#fff;line-height:1}
+  #word span.o{color:var(--orange)}
+  #tag{left:0;width:1920px;top:770px;text-align:center;color:#fff;font-weight:500;font-size:34px;letter-spacing:14px;text-transform:uppercase}
+  #tag b{color:var(--orange);font-weight:800}
+  .spark{width:18px;height:18px;border-radius:50%}
+
+  /* wipe */
+  .wipe{position:absolute;top:-10%;height:120%;width:140%;left:0;z-index:50;transform-origin:left center}
+  .wipe .w1{position:absolute;inset:0;background:var(--orange)}
+  .wipe .w2{position:absolute;inset:0;background:var(--black);left:20%}
+
+  /* ---------- mosaic ---------- */
+  #s2{background:#FFF8F3}
+  #grid{left:-260px;top:-420px;width:2440px;height:1920px;display:flex;gap:26px;transform:rotate(-9deg)}
+  .col{flex:1;display:flex;flex-direction:column;gap:26px}
+  .col .ph{width:100%;height:520px;border-radius:28px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+  #s2 .veil{inset:0;background:radial-gradient(900px 520px at 50% 50%,rgba(255,248,243,.97) 30%,rgba(255,248,243,.55) 70%,rgba(255,248,243,.25))}
+  #s2 .title{left:0;width:1920px;top:330px;text-align:center}
+  #s2 .kick{font-weight:800;font-size:30px;letter-spacing:12px;color:var(--orange);text-transform:uppercase}
+  #s2 h1{font-weight:900;font-size:190px;letter-spacing:-6px;color:var(--ink);line-height:1.05}
+  #s2 h1 em{font-style:normal;color:var(--orange)}
+  #s2 .sub{margin-top:24px;font-weight:600;font-size:36px;color:#555}
+  #s2 .bar{left:810px;width:300px;height:10px;top:660px;border-radius:5px;background:var(--orange);transform-origin:left}
+
+  /* ---------- dishes ---------- */
+  #s3{background:var(--grey)}
+  #s3 .blob{width:1300px;height:1300px;border-radius:50%;background:var(--peach)}
+  #s3 .num{font-weight:900;font-size:520px;letter-spacing:-20px;color:transparent;-webkit-text-stroke:3px rgba(242,92,5,.22);line-height:1}
+  .card{width:880px;height:760px;top:160px;border-radius:40px;overflow:hidden;background:#fff;box-shadow:0 40px 90px rgba(80,30,0,.22);display:flex;gap:10px;border:0}
+  .card .half{position:relative;flex:1;overflow:hidden;background:var(--sep)}
+  .card .half img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .card .seam{position:absolute;left:50%;top:0;bottom:0;width:10px;margin-left:-5px;background:var(--sep)}
+  .info{width:800px;top:250px}
+  .info .cat{font-weight:800;font-size:30px;letter-spacing:6px;color:var(--orange2);text-transform:uppercase}
+  .info .name{margin-top:22px;font-weight:800;font-size:76px;line-height:1.08;color:var(--ink);letter-spacing:-1.5px}
+  .info .price{margin-top:34px;font-weight:800;font-size:84px;color:var(--red);letter-spacing:-1px}
+  .info .price small{font-size:48px;letter-spacing:0;margin-left:14px}
+  .btnrow{margin-top:46px;display:flex;gap:22px;align-items:center}
+  .eye{width:104px;height:104px;border-radius:24px;background:var(--peach);display:flex;align-items:center;justify-content:center}
+  .btn{position:relative;overflow:hidden;height:104px;padding:0 54px;border-radius:24px;background:var(--orange);color:#fff;font-weight:700;font-size:38px;display:flex;align-items:center;gap:20px;box-shadow:0 18px 40px rgba(242,92,5,.35)}
+  .btn .rip{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.55);left:50%;top:50%;margin:-20px 0 0 -20px}
+  .topbar{left:0;top:0;width:1920px;height:120px;z-index:20}
+  .topbar .lg{left:80px;top:24px;width:84px;height:84px;border-radius:50%}
+  .topbar .brand{left:184px;top:38px;font-weight:900;font-size:44px;letter-spacing:-1px;color:var(--ink)}
+  .topbar .brand b{color:var(--orange)}
+  .topbar .nav{left:640px;top:50px;width:640px;display:flex;justify-content:center;gap:56px;font-weight:700;font-size:22px;letter-spacing:3px;color:#9a9a9a}
+  .topbar .nav .on{color:var(--orange)}
+  .iconbox{width:84px;height:84px;border-radius:22px;display:flex;align-items:center;justify-content:center}
+  .badge{position:absolute;right:-10px;top:-10px;min-width:40px;height:40px;border-radius:20px;background:var(--red);color:#fff;font-weight:800;font-size:22px;display:flex;align-items:center;justify-content:center;padding:0 10px;box-shadow:0 6px 16px rgba(215,9,45,.4)}
+  .progress{left:80px;bottom:56px;display:flex;gap:12px;z-index:20}
+  .progress i{display:block;width:60px;height:8px;border-radius:4px;background:rgba(0,0,0,.1);overflow:hidden}
+  .progress i b{display:block;height:100%;width:0;background:var(--orange)}
+
+  /* ---------- kinetic ---------- */
+  #s4{background:var(--black)}
+  .pan{top:0;height:1080px;width:640px;overflow:hidden}
+  .pan img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  #s4 .shade{inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.45))}
+  #s4 .band{left:0;width:1920px;top:400px;height:280px;background:var(--orange);transform-origin:left center;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #s4 .band span{font-weight:900;font-size:230px;letter-spacing:-6px;color:#fff;line-height:1;white-space:nowrap}
+  #s4 .band span b{color:var(--black)}
+
+  /* ---------- order ---------- */
+  #s5{background:var(--orange)}
+  #s5 .ring2{border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+  #s5 h2{font-weight:900;font-size:128px;line-height:1.0;letter-spacing:-4px;color:#fff}
+  #s5 h2 span{display:block}
+  #s5 h2 .dk{color:var(--black)}
+  #s5 .lead{margin-top:34px;font-weight:600;font-size:38px;color:rgba(255,255,255,.92)}
+  #s5 .mini{left:1110px;top:150px;width:640px;border-radius:36px;background:#fff;box-shadow:0 50px 100px rgba(0,0,0,.28);overflow:hidden}
+  #s5 .mini .ph2{height:440px;display:flex;gap:8px;background:var(--sep)}
+  #s5 .mini .ph2 div{flex:1;overflow:hidden;position:relative}
+  #s5 .mini .ph2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  #s5 .mini .bd{padding:34px 40px 40px}
+  #s5 .mini .cat{font-weight:800;font-size:22px;letter-spacing:5px;color:var(--orange2)}
+  #s5 .mini .nm{margin-top:12px;font-weight:800;font-size:40px;color:var(--ink);line-height:1.1}
+  #s5 .mini .pr{margin-top:16px;font-weight:800;font-size:46px;color:var(--red)}
+  #s5 .mini .btn{margin-top:26px;height:86px;font-size:30px;justify-content:center;padding:0}
+  #cursor{width:60px;height:60px;z-index:30}
+  .social{display:flex;gap:26px;align-items:center}
+  .soc{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 30px rgba(0,0,0,.25)}
+  .toast{left:1180px;top:84px;padding:20px 30px;border-radius:20px;background:var(--black);color:#fff;font-weight:700;font-size:28px;display:flex;gap:16px;align-items:center;z-index:31}
+  .toast i{display:inline-flex;width:40px;height:40px;border-radius:50%;background:var(--green);align-items:center;justify-content:center}
+
+  /* ---------- outro ---------- */
+  #s6{background:radial-gradient(1100px 760px at 50% 45%,#1d1209 0%,var(--black) 62%)}
+  #s6 .logo{left:960px;top:430px;width:340px;height:340px;margin:-170px 0 0 -170px;border-radius:50%}
+  #ring6{left:960px;top:430px;width:460px;height:460px;margin:-230px 0 0 -230px}
+  #s6 .url{left:0;width:1920px;top:700px;text-align:center;font-weight:900;font-size:96px;letter-spacing:-2px;color:#fff}
+  #s6 .url b{color:var(--orange)}
+  #s6 .line{left:0;width:1920px;top:830px;text-align:center;font-weight:600;font-size:32px;letter-spacing:10px;text-transform:uppercase;color:rgba(255,255,255,.75)}
+  #fade{position:absolute;inset:0;background:#000;z-index:100;opacity:0}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1. INTRO -->
+  <section class="scene" id="s1">
+    <div class="abs glow"></div>
+    <svg id="ring" class="abs" viewBox="0 0 560 560"></svg>
+    <img class="abs logo" src="assets/logo.png" alt="">
+    <div class="abs" id="word"></div>
+    <div class="abs" id="tag">Plats <b>fumés</b> &nbsp;·&nbsp; Fonio &nbsp;·&nbsp; Riz <b>soumbara</b></div>
+    <div class="abs spark" id="sp1" style="background:var(--green)"></div>
+    <div class="abs spark" id="sp2" style="background:var(--yellow)"></div>
+    <div class="abs spark" id="sp3" style="background:var(--orange)"></div>
+  </section>
+
+  <!-- 2. MOSAIC -->
+  <section class="scene" id="s2">
+    <div class="abs" id="grid"></div>
+    <div class="abs veil"></div>
+    <div class="abs title">
+      <div class="kick">Bienvenue chez Akadi</div>
+      <h1>Nos <em>plats</em></h1>
+      <div class="sub">Poulet, lapin &amp; mouton fumés · Fonio · Riz curcuma</div>
+    </div>
+    <div class="abs bar"></div>
+  </section>
+
+  <!-- 3. DISHES -->
+  <section class="scene dots" id="s3">
+    <div class="abs blob" id="blob"></div>
+    <div class="abs num" id="num">01</div>
+    <div class="abs card" id="card">
+      <div class="half"><img id="imgA" alt=""></div>
+      <div class="half"><img id="imgB" alt=""></div>
+    </div>
+    <div class="abs info" id="info">
+      <div class="cat" id="cat">Plat entier</div>
+      <div class="name" id="name"></div>
+      <div class="price" id="price"></div>
+      <div class="btnrow" id="btnrow">
+        <div class="eye"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#F25C05" stroke-width="2.4"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div class="btn" id="btn"><svg width="44" height="44" viewBox="0 0 24 24" fill="#fff"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5.2 4l.9 2H21l-3.4 7H8.1l-.9 1.6c-.1.2 0 .4.2.4H19v2H7c-1.5 0-2.4-1.6-1.7-2.9L6.6 12 3 4H1V2h3.3z"/><path d="M13 5h-2v2H9v2h2v2h2V9h2V7h-2z" fill="#F25C05"/></svg>Ajouter au panier<div class="rip" id="rip"></div></div>
+      </div>
+    </div>
+    <div class="abs topbar" id="topbar">
+      <img class="abs lg" src="assets/logo.png" alt="">
+      <div class="abs brand">AKADI<b>.</b></div>
+      <div class="abs nav"><span>ACCUEIL</span><span class="on">NOS PLATS</span><span>PANIER</span></div>
+      <div class="abs iconbox" style="left:1640px;top:24px;background:#FFE9DC"><svg width="40" height="40" viewBox="0 0 24 24" fill="#F25C05"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9h14v11H5z"/></svg></div>
+      <div class="abs iconbox" id="cartbox" style="left:1756px;top:24px;background:#FFE6EA"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D7092D" stroke-width="2.2" stroke-linejoin="round"><path d="M5 8h14l-1 13H6z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg><div class="badge" id="badge">0</div></div>
+    </div>
+    <div class="abs progress" id="prog"></div>
+  </section>
+
+  <!-- 4. KINETIC -->
+  <section class="scene" id="s4">
+    <div class="abs pan" id="p0" style="left:0"><img alt=""></div>
+    <div class="abs pan" id="p1" style="left:640px"><img alt=""></div>
+    <div class="abs pan" id="p2" style="left:1280px"><img alt=""></div>
+    <div class="abs shade"></div>
+    <div class="abs band" id="band"><span id="bandtxt"></span></div>
+  </section>
+
+  <!-- 5. ORDER -->
+  <section class="scene" id="s5">
+    <div class="abs ring2" style="left:-300px;top:-300px;width:1000px;height:1000px"></div>
+    <div class="abs ring2" style="left:-150px;top:-150px;width:700px;height:700px"></div>
+    <div class="abs" id="ordertxt" style="left:140px;top:250px;width:900px">
+      <h2><span id="h2a">Commandez</span><span id="h2b" class="dk">en un clic.</span></h2>
+      <div class="lead" id="lead">Choisissez votre plat, on s’occupe du reste.</div>
+      <div class="social abs" id="social" style="top:470px;left:0">
+        <div class="soc" style="background:#1877F2"><svg width="48" height="48" viewBox="0 0 24 24" fill="#fff"><path d="M14 8V6.5c0-.8.2-1.5 1.5-1.5H17V2h-2.6C11.6 2 11 3.8 11 6v2H9v3h2v11h3V11h2.4l.6-3z"/></svg></div>
+        <div class="soc" style="background:#25D366"><svg width="52" height="52" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg></div>
+        <div style="font-weight:700;font-size:34px;color:#fff;margin-left:8px">akadi.ci</div>
+      </div>
+    </div>
+    <div class="abs mini" id="mini">
+      <div class="ph2"><div><img src="assets/lapin_braise.jpg" alt=""></div><div><img src="assets/riz_soumbara.jpg" alt=""></div></div>
+      <div class="bd">
+        <div class="cat">PLAT ENTIER</div>
+        <div class="nm">Lapin Entier Fumé braisé Ail + Riz Soumbara</div>
+        <div class="pr">16 000 FCFA</div>
+        <div class="btn" id="btn5">Ajouter au panier<div class="rip" id="rip5"></div></div>
+      </div>
+    </div>
+    <div class="abs toast" id="toast"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg></i>Ajouté au panier</div>
+    <svg class="abs" id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 9-6.5 1.5L16 20l-3 1.5-3.5-7.5L4 18z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg>
+  </section>
+
+  <!-- 6. OUTRO -->
+  <section class="scene" id="s6">
+    <svg id="ring6" class="abs" viewBox="0 0 460 460"></svg>
+    <img class="abs logo" src="assets/logo.png" alt="">
+    <div class="abs url" id="url">akadi<b>.ci</b></div>
+    <div class="abs line" id="line">Le goût qui rassemble</div>
+  </section>
+
+  <div class="wipe" id="wipe"><div class="w1"></div><div class="w2" id="w2"></div></div>
+  <div id="fade"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const P=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const eOut=p=>1-Math.pow(1-p,3);
+const eOut5=p=>1-Math.pow(1-p,5);
+const eIn=p=>p*p*p;
+const eIO=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const eExpo=p=>p===1?1:1-Math.pow(2,-10*p);
+const eBack=p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2)};
+const css=(el,o)=>{for(const k in o) el.style[k]=o[k]};
+const IMG=n=>`assets/${n}.jpg`;
+
+/* ---------- build: intro ring ---------- */
+(function(){
+  const svg=$('#ring'); let h='';
+  h+=`<circle id="arc" cx="280" cy="280" r="250" fill="none" stroke="#F25C05" stroke-width="14" stroke-linecap="round" transform="rotate(-90 280 280)"/>`;
+  for(let i=0;i<12;i++){const a=i/12*Math.PI*2;const x1=280+Math.sin(a)*222,y1=280-Math.cos(a)*222,x2=280+Math.sin(a)*204,y2=280-Math.cos(a)*204;
+    h+=`<line class="tick" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#F25C05" stroke-width="6" stroke-linecap="round"/>`;}
+  svg.innerHTML=h;
+  const svg6=$('#ring6');
+  svg6.innerHTML=`<circle id="arc6" cx="230" cy="230" r="215" fill="none" stroke="#F25C05" stroke-width="10" stroke-linecap="round" transform="rotate(-90 230 230)"/>`;
+  const w=$('#word'); 'AKADI'.split('').forEach((c,i)=>{const s=document.createElement('span');s.textContent=c;if(i===0)s.className='o';w.appendChild(s)});
+})();
+/* ---------- build: mosaic ---------- */
+const ALL=['poulet_ail','riz_curcuma','lapin_braise','fonio_curcuma','mouton_fume','poulet_vert','riz_soumbara','lapin_saute','fonio_poulet','mouton_saute','soumbara_plantain','ragout_legumes','fonio_blanc','fonio_legumes'];
+(function(){
+  const g=$('#grid');
+  for(let c=0;c<6;c++){const col=document.createElement('div');col.className='col';
+    for(let r=0;r<6;r++){const d=document.createElement('div');d.className='ph';d.innerHTML=`<img class="cover" src="${IMG(ALL[(c*5+r*3)%ALL.length])}">`;col.appendChild(d);}
+    g.appendChild(col);}
+})();
+/* ---------- dishes data ---------- */
+const DISHES=[
+  {cat:'Plat entier',name:'Fonio Poulet Fumé<br>Entier à l’ail',price:11000,a:'fonio_blanc',b:'poulet_ail'},
+  {cat:'Plat entier',name:'Lapin Fumé Sauté<br>Riz Curcuma',price:15000,a:'riz_curcuma',b:'lapin_saute'},
+  {cat:'Plat entier',name:'Fonio Curcuma<br>Mouton Sauté',price:13000,a:'mouton_saute',b:'fonio_curcuma'},
+  {cat:'Plat entier',name:'Lapin Entier Fumé braisé<br>Ail + Riz Soumbara',fs:62,price:16000,a:'lapin_braise',b:'riz_soumbara'},
+  {cat:'Entier',name:'Mouton Fumé Sauté<br>+ Fonio',price:12000,a:'fonio_legumes',b:'mouton_fume'},
+  {cat:'Plat entier',name:'Fonio curcuma + Poulet<br>Entier fumé braisé à l’ail',fs:62,price:13000,a:'fonio_poulet',b:'poulet_vert'},
+];
+$('#prog').innerHTML=DISHES.map(()=>'<i><b></b></i>').join('');
+const fmt=n=>Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+
+/* ---------- kinetic data ---------- */
+const KIN=[
+  {w:'FUMÉ<b>.</b>',imgs:['poulet_ail','lapin_braise','poulet_vert']},
+  {w:'BRAISÉ<b>.</b>',imgs:['fonio_poulet','riz_soumbara','lapin_saute']},
+  {w:'SAUTÉ<b>.</b>',imgs:['mouton_fume','fonio_curcuma','ragout_legumes']},
+  {w:'SAVOUREUX<b>.</b>',imgs:['riz_curcuma','soumbara_plantain','mouton_saute']},
+];
+
+/* ---------- timeline ---------- */
+const SC=[['#s1',0,6.1],['#s2',5.9,12.1],['#s3',11.9,42.1],['#s4',41.9,50.1],['#s5',49.9,56.1],['#s6',55.9,60.1]];
+let lastDish=-1,lastKin=-1;
+
+function wipe(t,t0){ // orange+black diagonal wipe centred on t0 (covers screen at t0)
+  const p=P(t,t0-0.55,t0+0.55);
+  const el=$('#wipe');
+  if(p<=0||p>=1){el.style.visibility='hidden';return}
+  el.style.visibility='visible';
+  const x=lerp(1920,-2700,eIO(p));
+  css(el,{transform:`translateX(${x}px) skewX(-14deg)`});
+}
+
+function render(t){
+  for(const [id,a,b] of SC) $(id).style.visibility=(t>=a&&t<b)?'visible':'hidden';
+  // transitions
+  const wt=[6,12,42,50,56].find(x=>Math.abs(t-x)<0.56);
+  if(wt!==undefined) wipe(t,wt); else $('#wipe').style.visibility='hidden';
+  if(t<6.1) intro(t);
+  if(t>=5.9&&t<12.1) mosaic(t-6);
+  if(t>=11.9&&t<42.1) dishes(t-12);
+  if(t>=41.9&&t<50.1) kinetic(t-42);
+  if(t>=49.9&&t<56.1) order(t-50);
+  if(t>=55.9) outro(t-56);
+  $('#fade').style.opacity=t<0.4?1-P(t,0,0.4):P(t,59.2,60);
+}
+
+/* 1. INTRO 0–6 */
+function intro(t){
+  const C=2*Math.PI*250;
+  const pr=eIO(P(t,0.15,1.35));
+  css($('#arc'),{strokeDasharray:C,strokeDashoffset:C*(1-pr)});
+  document.querySelectorAll('#ring .tick').forEach((l,i)=>{const q=eOut(P(t,0.3+i*0.07,0.6+i*0.07));l.style.opacity=q});
+  const lp=eBack(P(t,0.95,1.65));
+  // logo + ring then shift left to make room for the word
+  const sh=eIO(P(t,2.1,2.9));
+  const cx=lerp(0,-560,sh), sc=lerp(1,0.62,sh);
+  const ringRot=t*20;
+  css($('#ring'),{transform:`translateX(${cx}px) scale(${sc*(0.9+0.1*pr)}) rotate(${ringRot}deg)`,opacity:1-0.0*sh});
+  css($('#s1 .logo'),{transform:`translateX(${cx}px) scale(${sc*lp})`,opacity:clamp(lp*1.5)});
+  css($('#s1 .glow'),{transform:`translateX(${cx}px) scale(${0.6+0.4*eOut(P(t,0.9,2))})`,opacity:0.5+0.5*Math.sin(t*2)*0.2+0.3*eOut(P(t,0.9,1.4))});
+  // word
+  const spans=document.querySelectorAll('#word span');
+  css($('#word'),{left:'690px'});
+  spans.forEach((s,i)=>{const q=P(t,2.45+i*0.08,3.05+i*0.08);const e=eOut5(q);
+    css(s,{transform:`translateY(${lerp(180,0,e)}px) rotate(${lerp(12,0,e)}deg)`,opacity:e,filter:`blur(${(1-e)*14}px)`});});
+  const tp=eOut(P(t,3.4,4.2));
+  css($('#tag'),{opacity:tp,transform:`translateY(${lerp(30,0,tp)}px)`,letterSpacing:lerp(30,14,tp)+'px'});
+  // sparks orbiting
+  [[1,0],[1.3,2.1],[0.8,4.2]].forEach(([sp,ph],i)=>{const a=t*sp+ph;const r=330*sc;const q=eOut(P(t,1.4+i*0.15,1.9+i*0.15));
+    css($('#sp'+(i+1)),{left:(960+cx+Math.cos(a)*r-9)+'px',top:(540+Math.sin(a)*r-9)+'px',transform:`scale(${q})`});});
+  // exit zoom
+  const ex=eIn(P(t,5.3,6.0));
+  css($('#s1'),{transform:`scale(${1+ex*0.15})`});
+}
+
+/* 2. MOSAIC 6–12 */
+function mosaic(u){
+  const cols=document.querySelectorAll('#grid .col');
+  cols.forEach((c,i)=>{const dir=i%2?1:-1;const ent=eOut5(P(u,0,1.1+i*0.06));
+    const y=dir*(lerp(900,0,ent)) + dir*u*-55 + (i%2?-560:-120);
+    css(c,{transform:`translateY(${y}px)`});});
+  const zoom=1.15-0.1*eOut(P(u,0,6)) + eIn(P(u,5.3,6))*0.4;
+  css($('#grid'),{transform:`rotate(-9deg) scale(${zoom})`});
+  const v=eOut(P(u,0.6,1.4));
+  css($('#s2 .veil'),{opacity:v});
+  const k=eOut5(P(u,0.9,1.6)), h=eOut5(P(u,1.1,1.9)), s=eOut5(P(u,1.5,2.3));
+  css($('#s2 .kick'),{opacity:k,transform:`translateY(${lerp(30,0,k)}px)`,letterSpacing:lerp(30,12,k)+'px'});
+  css($('#s2 h1'),{opacity:h,transform:`translateY(${lerp(60,0,h)}px) scale(${lerp(0.9,1,h)})`});
+  css($('#s2 .sub'),{opacity:s,transform:`translateY(${lerp(30,0,s)}px)`});
+  css($('#s2 .bar'),{transform:`scaleX(${eOut5(P(u,1.9,2.6))})`,top:'720px'});
+  const out=eIn(P(u,5.2,5.9));
+  css($('#s2 .title'),{opacity:1-out,transform:`scale(${1+out*0.2})`});
+}
+
+/* 3. DISHES 12–42 : 6 × 5 s */
+function dishes(u){
+  const i=clamp(Math.floor(u/5),0,5), d=DISHES[i], v=u-i*5, left=i%2===0;
+  if(i!==lastDish){ $('#imgA').src=IMG(d.a); $('#imgB').src=IMG(d.b);
+    $('#cat').textContent=d.cat; $('#name').innerHTML=d.name; $('#name').style.fontSize=(d.fs||76)+'px'; $('#num').textContent='0'+(i+1); lastDish=i; }
+  const cardX=left?110:930, infoX=left?1080:150;
+  const inP=eOut5(P(v,0.0,0.9)), outP=eIn(P(v,4.45,5.0));
+  const card=$('#card');
+  css(card,{left:cardX+'px',transform:`translateX(${(left?-1:1)*(1-inP)*300 + (left?-1:1)*outP*1300}px) rotate(${(left?-1:1)*(1-inP)*4}deg)`,opacity:clamp(inP*2)});
+  // halves: vertical reveal in opposite directions + ken burns
+  const hA=eOut5(P(v,0.15,1.0)), hB=eOut5(P(v,0.3,1.15));
+  css($('#imgA'),{clipPath:`inset(${(1-hA)*100}% 0 0 0)`,transform:`scale(${1.18-0.12*P(v,0,5)}) translateY(${(1-hA)*-60}px)`});
+  css($('#imgB'),{clipPath:`inset(0 0 ${(1-hB)*100}% 0)`,transform:`scale(${1.06+0.12*P(v,0,5)}) translateY(${(1-hB)*60}px)`});
+  // background shapes
+  css($('#blob'),{left:(left?-260:1000)+lerp(0,40,P(v,0,5))+'px',top:'-120px',transform:`scale(${0.85+0.15*eOut(P(v,0,1))})`});
+  css($('#num'),{left:(left?1300:120)+'px',top:'480px',transform:`translateX(${(1-eOut5(P(v,0.2,1.2)))*(left?200:-200)}px)`,opacity:1-outP});
+  // text stagger
+  const info=$('#info'); css(info,{left:infoX+'px'});
+  const parts=['#cat','#name','#price','#btnrow'];
+  parts.forEach((s,k)=>{const q=eOut5(P(v,0.45+k*0.14,1.15+k*0.14)); const o=eIn(P(v,4.35+k*0.04,4.85+k*0.04));
+    css($(s),{opacity:q*(1-o),transform:`translateY(${lerp(50,0,q) - o*40}px)`});});
+  const cnt=eOut(P(v,0.75,1.9));
+  $('#price').innerHTML=fmt(d.price*cnt)+'<small>FCFA</small>';
+  // button press @ 3.0
+  const press=P(v,2.95,3.25), pb=Math.sin(press*Math.PI);
+  css($('#btn'),{transform:`scale(${1-0.06*pb})`});
+  const rp=P(v,3.0,3.7);
+  css($('#rip'),{transform:`scale(${rp*16})`,opacity:rp>0&&rp<1?(1-rp)*0.9:0});
+  // cart badge
+  const added=i+(v>=3.15?1:0);
+  $('#badge').textContent=added;
+  const bump=Math.sin(P(v,3.15,3.55)*Math.PI);
+  css($('#cartbox'),{transform:`scale(${1+0.18*bump}) rotate(${bump*-8}deg)`});
+  css($('#badge'),{opacity:added>0?1:0,transform:`scale(${added>0?1+0.35*bump:0})`});
+  // flying dot from button to cart
+  // topbar enter
+  const tb=eOut5(P(u,0,0.8));
+  css($('#topbar'),{transform:`translateY(${(1-tb)*-130}px)`});
+  // progress
+  document.querySelectorAll('#prog b').forEach((b,k)=>{b.style.width=(k<i?100:k===i?P(v,0,5)*100:0)+'%'});
+}
+
+/* 4. KINETIC 42–50 : 4 × 2 s */
+function kinetic(u){
+  const i=clamp(Math.floor(u/2),0,3), k=KIN[i], v=u-i*2;
+  if(i!==lastKin){ ['#p0','#p1','#p2'].forEach((s,j)=>$(s+' img').src=IMG(k.imgs[j])); $('#bandtxt').innerHTML=k.w; lastKin=i; }
+  ['#p0','#p1','#p2'].forEach((s,j)=>{const q=eOut5(P(v,j*0.08,0.5+j*0.08)); const dir=j%2?1:-1;
+    css($(s),{clipPath:`inset(${dir<0?(1-q)*100:0}% 0 ${dir>0?(1-q)*100:0}% 0)`});
+    css($(s+' img'),{transform:`scale(${1.25-0.12*P(v,0,2)}) translateY(${dir*lerp(0,-30,P(v,0,2))}px)`});});
+  const b=eOut5(P(v,0.25,0.7)), bo=eIn(P(v,1.75,2));
+  css($('#band'),{transform:`scaleX(${b}) skewY(${(i%2?3:-3)}deg)`,opacity:1-bo});
+  const tx=eOut5(P(v,0.35,0.9));
+  css($('#bandtxt'),{transform:`translateX(${lerp(i%2?-400:400,0,tx) + (i%2?-1:1)*-40*P(v,0.9,2)}px)`,opacity:tx});
+}
+
+/* 5. ORDER 50–56 */
+function order(u){
+  const a=eOut5(P(u,0.15,0.75)), b=eOut5(P(u,0.3,0.9)), l=eOut5(P(u,0.6,1.2)), so=eBack(P(u,1.0,1.6));
+  css($('#h2a'),{opacity:a,transform:`translateY(${lerp(80,0,a)}px)`});
+  css($('#h2b'),{opacity:b,transform:`translateY(${lerp(80,0,b)}px)`});
+  css($('#lead'),{opacity:l,transform:`translateY(${lerp(30,0,l)}px)`});
+  css($('#social'),{opacity:clamp(so),transform:`scale(${so})`,transformOrigin:'left center'});
+  const m=eOut5(P(u,0.2,1.0));
+  css($('#mini'),{transform:`translateY(${lerp(700,0,m)}px) rotate(${lerp(8,-2,m)}deg)`});
+  // cursor path: enters from bottom-right, moves to button, clicks at 2.6
+  const cp=eIO(P(u,1.2,2.5));
+  const bx=1430, by=950;
+  const x=lerp(1900,bx,cp), y=lerp(1120,by,cp)-Math.sin(cp*Math.PI)*120;
+  const click=Math.sin(P(u,2.55,2.8)*Math.PI);
+  css($('#cursor'),{left:x+'px',top:y+'px',transform:`scale(${1-0.2*click})`,opacity:P(u,1.2,1.4)});
+  css($('#btn5'),{transform:`scale(${1-0.05*click})`});
+  const rp=P(u,2.6,3.3);
+  css($('#rip5'),{transform:`scale(${rp*16})`,opacity:rp>0&&rp<1?(1-rp)*0.9:0});
+  const ts=eBack(P(u,2.8,3.3)), te=eIn(P(u,5.0,5.4));
+  css($('#toast'),{opacity:clamp(ts)*(1-te),transform:`translateY(${lerp(-40,0,clamp(ts))}px) scale(${0.8+0.2*clamp(ts)})`});
+}
+
+/* 6. OUTRO 56–60 */
+function outro(u){
+  const C=2*Math.PI*215;
+  const r=eIO(P(u,0.1,1.2));
+  css($('#arc6'),{strokeDasharray:C,strokeDashoffset:C*(1-r)});
+  css($('#ring6'),{transform:`rotate(${u*25}deg)`});
+  const lg=eBack(P(u,0.3,1.0));
+  css($('#s6 .logo'),{transform:`scale(${lg})`,opacity:clamp(lg*1.5)});
+  const ur=eOut5(P(u,0.9,1.6)), ln=eOut(P(u,1.3,2.1));
+  css($('#url'),{opacity:ur,transform:`translateY(${lerp(50,0,ur)}px)`});
+  css($('#line'),{opacity:ln,letterSpacing:lerp(24,10,ln)+'px'});
+}
+
+window.render=render;
+render(0);
+</script>
+</body>
+</html>
