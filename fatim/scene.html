@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Fatim Style Motion</title>
+<style>
+  @font-face{font-family:Bodoni;src:url(fonts/bodoni-moda-latin-400-normal.woff2);font-weight:400}
+  @font-face{font-family:Bodoni;src:url(fonts/bodoni-moda-latin-500-normal.woff2);font-weight:500}
+  @font-face{font-family:Bodoni;src:url(fonts/bodoni-moda-latin-600-normal.woff2);font-weight:600}
+  @font-face{font-family:Bodoni;src:url(fonts/bodoni-moda-latin-400-italic.woff2);font-weight:400;font-style:italic}
+  @font-face{font-family:Bodoni;src:url(fonts/bodoni-moda-latin-500-italic.woff2);font-weight:500;font-style:italic}
+  @font-face{font-family:Figtree;src:url(fonts/figtree-latin-400-normal.woff2);font-weight:400}
+  @font-face{font-family:Figtree;src:url(fonts/figtree-latin-500-normal.woff2);font-weight:500}
+  @font-face{font-family:Figtree;src:url(fonts/figtree-latin-600-normal.woff2);font-weight:600}
+  @font-face{font-family:Figtree;src:url(fonts/figtree-latin-700-normal.woff2);font-weight:700}
+  :root{--dark:#231A1D;--dark2:#1A1315;--plum:#2E2226;--cream:#F4EFEA;--pink:#E7A6BD;--pinkd:#D88BA6;--gold:#C9A46A;--muted:#BBAAB0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1920px;height:1080px;overflow:hidden;background:var(--dark);font-family:Figtree,sans-serif;-webkit-font-smoothing:antialiased}
+  #stage{position:relative;width:1920px;height:1080px;overflow:hidden}
+  .scene{position:absolute;inset:0;overflow:hidden;visibility:hidden}
+  .abs{position:absolute}
+  img{display:block}
+  .cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .serif{font-family:Bodoni,serif}
+  .kicker{font-weight:600;font-size:24px;letter-spacing:8px;text-transform:uppercase;color:var(--pink)}
+  .grain{position:absolute;inset:0;pointer-events:none;background:radial-gradient(1200px 700px at 70% 40%,rgba(231,166,189,.07),transparent 70%)}
+
+  /* intro */
+  #s1{background:var(--dark2)}
+  #brand{left:0;top:0;width:1920px;height:1080px}
+  #brand .name{position:absolute;white-space:nowrap;font-family:Bodoni,serif;font-weight:500;font-size:150px;color:var(--pink);letter-spacing:22px;line-height:1}
+  #brand .name span{display:inline-block}
+  #arch{left:1090px;top:110px;width:640px;height:860px;border-radius:320px 320px 0 0;overflow:hidden;background:#3a2b30}
+  #arch img{object-position:50% 20%}
+  #archline{left:1060px;top:80px;width:700px;height:920px}
+  #tagline{left:150px;top:560px;font-family:Bodoni,serif;font-style:italic;font-size:76px;color:var(--cream);white-space:nowrap}
+  #s1 .kicker{left:154px;top:360px}
+  #s1 .rule{left:154px;top:690px;width:380px;height:2px;background:var(--gold);transform-origin:left}
+  #s1 .sub{left:154px;top:730px;font-size:30px;color:var(--muted);line-height:1.5;width:760px}
+
+  /* curtain */
+  .curtain{position:absolute;top:0;width:1920px;height:1080px;z-index:60;visibility:hidden}
+  .curtain div{position:absolute;top:0;height:100%;width:100%}
+  #c1{background:var(--pink)} #c2{background:var(--dark2)}
+
+  /* collection intro */
+  #s2{background:var(--cream)}
+  #s2 .left{left:0;top:0;width:960px;height:1080px;overflow:hidden}
+  #s2 .left img{object-position:50% 30%}
+  #s2 .txt{left:1060px;top:240px;width:760px}
+  #s2 h2{font-family:Bodoni,serif;font-weight:500;font-size:92px;line-height:1.05;color:var(--dark);margin-top:26px}
+  #s2 h2 i{color:var(--pinkd)}
+  #s2 .cats{margin-top:46px;display:flex;flex-direction:column;gap:18px}
+  #s2 .cats div{font-size:34px;font-weight:500;color:var(--dark);display:flex;align-items:center;gap:22px}
+  #s2 .cats div b{display:inline-block;width:46px;height:2px;background:var(--pinkd)}
+  #strip{left:0;top:0;width:1920px;height:1080px;background:var(--dark)}
+  #strip .row{position:absolute;top:290px;left:0;display:flex;gap:28px}
+  #strip .tile{width:330px;height:500px;border-radius:24px;overflow:hidden;position:relative;flex:none}
+  #strip h2{position:absolute;left:0;width:1920px;top:110px;text-align:center;font-family:Bodoni,serif;font-weight:500;font-size:96px;color:var(--cream)}
+  #strip .k2{position:absolute;left:0;width:1920px;top:860px;text-align:center}
+
+  /* products */
+  #s3{background:var(--dark)}
+  .topbar{left:0;top:0;width:1920px;height:120px;background:var(--cream);z-index:10;border-bottom:1px solid #d9cfd2}
+  .topbar .logo{left:0;width:1920px;top:30px;text-align:center;font-family:Bodoni,serif;font-weight:500;font-size:52px;letter-spacing:10px;color:var(--pink)}
+  .topbar .burger{left:80px;top:46px;width:44px}
+  .topbar .burger i{display:block;height:3px;background:#e6d9dd;margin-bottom:9px;border-radius:2px}
+  .topbar .bag{left:1780px;top:34px;width:56px;height:56px}
+  .badge{position:absolute;right:-10px;top:-8px;width:34px;height:34px;border-radius:50%;background:var(--pinkd);color:#fff;font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:center}
+  #ptitle{left:150px;top:250px;width:680px}
+  #ptitle h2{font-family:Bodoni,serif;font-weight:500;font-size:88px;line-height:1.02;color:var(--cream);margin-top:24px}
+  #ptitle h2 i{color:var(--pink)}
+  #ptitle .desc{margin-top:30px;font-size:30px;color:var(--muted);line-height:1.45}
+  #ptitle .dots{margin-top:34px;display:flex;gap:16px}
+  #ptitle .dots i{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+  .pcard{position:absolute;top:190px;width:440px}
+  .pcard .ph{position:relative;width:440px;height:590px;border-radius:30px;overflow:hidden;background:#3a2b30}
+  .pcard .nm{margin-top:22px;font-size:30px;font-weight:500;color:var(--cream);line-height:1.25;height:76px}
+  .pcard .row{margin-top:12px;display:flex;align-items:center;justify-content:space-between}
+  .pcard .pr{font-size:34px;font-weight:500;color:var(--pink)}
+  .plus{width:74px;height:74px;border-radius:50%;border:2.5px solid var(--pink);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .plus .fill{position:absolute;inset:0;background:var(--pink);border-radius:50%}
+  .plus svg{position:relative}
+  .pcard.wide{width:930px}
+  .pcard.wide .ph{width:930px;height:590px}
+  .progress{left:150px;bottom:70px;display:flex;gap:12px}
+  .progress i{display:block;width:56px;height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
+  .progress i b{display:block;height:100%;width:0;background:var(--pink)}
+
+  /* categories */
+  #s4{background:var(--dark2)}
+  #s4 h2{left:150px;top:150px;font-family:Bodoni,serif;font-weight:500;font-size:88px;line-height:1.05;color:var(--cream);width:700px}
+  #chips{left:150px;top:470px;display:flex;flex-direction:column;gap:20px}
+  .chip{height:76px;padding:0 40px;border-radius:38px;border:1.5px solid rgba(231,166,189,.35);background:#2b2024;color:var(--cream);font-size:30px;font-weight:500;display:flex;align-items:center;width:max-content}
+  .chip.on{background:var(--pink);color:var(--dark);border-color:var(--pink)}
+  #tiles{left:880px;top:110px;width:900px;height:860px}
+  #tiles .t{position:absolute;width:435px;height:420px;border-radius:26px;overflow:hidden;background:#3a2b30}
+
+  /* whatsapp */
+  #s5{background:var(--dark)}
+  #s5 .txt{left:150px;top:300px;width:820px}
+  #s5 h2{font-family:Bodoni,serif;font-weight:500;font-size:100px;line-height:1.02;color:var(--cream)}
+  #s5 h2 i{color:var(--pink)}
+  #s5 .lead{margin-top:34px;font-size:34px;color:var(--muted);line-height:1.45}
+  #chat{left:1080px;top:150px;width:690px;height:780px;border-radius:40px;background:#0f1a17;overflow:hidden;box-shadow:0 50px 100px rgba(0,0,0,.45)}
+  #chat .hd{height:120px;background:#1f2c28;display:flex;align-items:center;gap:22px;padding:0 34px}
+  #chat .av{width:70px;height:70px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-family:Bodoni,serif;font-size:30px;color:var(--pinkd);font-weight:600}
+  #chat .hn{color:#fff;font-size:32px;font-weight:600}
+  #chat .hs{color:#8fa39b;font-size:22px;margin-top:4px}
+  #chat .body{position:absolute;top:120px;left:0;right:0;bottom:0;padding:40px 34px;background:#0b1411}
+  .bub{position:absolute;right:34px;width:470px;background:#1d5c45;border-radius:26px 26px 6px 26px;padding:16px;color:#fff}
+  .bub .im{height:300px;border-radius:18px;overflow:hidden;position:relative}
+  .bub .t1{margin-top:14px;font-size:26px;font-weight:600;padding:0 6px}
+  .bub .t2{font-size:24px;color:#cfe5db;padding:2px 6px 0}
+  .bub2{position:absolute;right:34px;max-width:470px;background:#1d5c45;border-radius:26px 26px 6px 26px;padding:18px 24px;color:#fff;font-size:26px;line-height:1.35}
+  .tick{font-size:18px;color:#7fd3ff;text-align:right;margin-top:4px}
+  .wa{display:flex;align-items:center;gap:18px;margin-top:46px;height:86px;padding:0 40px 0 26px;border-radius:43px;background:#25D366;color:#fff;font-size:30px;font-weight:600;width:max-content}
+
+  /* outro */
+  #s6{background:var(--cream)}
+  #s6 .arch2{left:420px;top:120px;width:1080px;height:1000px;border-radius:540px 540px 0 0;border:2px solid var(--gold)}
+  #s6 .nm{left:0;width:1920px;top:400px;text-align:center;font-family:Bodoni,serif;font-weight:500;font-size:112px;letter-spacing:18px;color:var(--pinkd);white-space:nowrap}
+  #s6 .tg{left:0;width:1920px;top:560px;text-align:center;font-family:Bodoni,serif;font-style:italic;font-size:56px;color:var(--dark)}
+  #s6 .cta{left:0;width:1920px;top:690px;display:flex;justify-content:center}
+  #s6 .cta div{display:flex;align-items:center;gap:16px;height:82px;padding:0 44px 0 30px;border-radius:41px;background:var(--pink);color:var(--dark);font-size:30px;font-weight:600}
+  #s6 .url{left:0;width:1920px;top:820px;text-align:center;font-size:30px;letter-spacing:4px;color:#7d6a70}
+  #fade{position:absolute;inset:0;background:#000;z-index:100;opacity:0}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1 INTRO -->
+  <section class="scene" id="s1">
+    <div class="grain"></div>
+    <svg class="abs" id="archline" viewBox="0 0 700 920"><path id="ap" d="M2 918 V350 A348 348 0 0 1 698 350 V918" fill="none" stroke="#C9A46A" stroke-width="2.5"/></svg>
+    <div class="abs" id="arch"><img class="cover" src="assets/hero_bleue.jpg" alt=""></div>
+    <div class="abs kicker">Nouvelle collection</div>
+    <div class="abs" id="brand"><div class="name" id="bname"></div></div>
+    <div class="abs" id="tagline">L’élégance au quotidien</div>
+    <div class="abs rule"></div>
+    <div class="abs sub" id="sub1">Robes, ensembles, jupes et chaussures.</div>
+  </section>
+
+  <!-- 2 COLLECTION -->
+  <section class="scene" id="s2">
+    <div class="abs left"><img class="cover" id="s2img" src="assets/maxi_rayees.jpg" alt=""></div>
+    <div class="abs txt">
+      <div class="kicker" id="s2k" style="color:var(--pinkd)">Fatim Style</div>
+      <h2 id="s2h">Des pièces<br>qui vous <i>subliment</i></h2>
+      <div class="cats" id="cats"><div><b></b>Robes</div><div><b></b>Ensembles</div><div><b></b>Jupes</div><div><b></b>Chaussures</div></div>
+    </div>
+    <div class="abs" id="strip">
+      <h2 id="sth">Nos nouveautés</h2>
+      <div class="row" id="row"></div>
+      <div class="kicker k2" id="stk">L’élégance au quotidien</div>
+    </div>
+  </section>
+
+  <!-- 3 PRODUCTS -->
+  <section class="scene" id="s3">
+    <div class="grain"></div>
+    <div class="abs topbar" id="topbar">
+      <div class="abs burger"><i></i><i></i><i></i></div>
+      <div class="logo abs">FATIM STYLE</div>
+      <svg class="abs bag" id="bag" viewBox="0 0 24 24" fill="none" stroke="#E7A6BD" stroke-width="1.6" stroke-linejoin="round"><path d="M5 8h14l-1 13H6z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+      <div class="abs badge" id="badge" style="left:1812px;top:26px">0</div>
+    </div>
+    <div class="abs" id="ptitle">
+      <div class="kicker" id="pk">Nos nouveautés</div>
+      <h2 id="ph"></h2>
+      <div class="desc" id="pd"></div>
+      <div class="dots" id="pdots"></div>
+    </div>
+    <div class="pcard" id="cA"><div class="ph"><img class="cover" alt=""></div><div class="nm"></div><div class="row"><div class="pr"></div><div class="plus"><div class="fill"></div><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E7A6BD" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div></div></div>
+    <div class="pcard" id="cB"><div class="ph"><img class="cover" alt=""></div><div class="nm"></div><div class="row"><div class="pr"></div><div class="plus"><div class="fill"></div><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E7A6BD" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div></div></div>
+    <div class="abs progress" id="prog"></div>
+  </section>
+
+  <!-- 4 CATEGORIES -->
+  <section class="scene" id="s4">
+    <div class="grain"></div>
+    <h2 class="abs" id="s4h">Trouvez la pièce qui vous <i style="color:var(--pink)">ressemble</i></h2>
+    <div class="abs" id="chips"></div>
+    <div class="abs" id="tiles"></div>
+  </section>
+
+  <!-- 5 WHATSAPP -->
+  <section class="scene" id="s5">
+    <div class="grain"></div>
+    <div class="abs txt">
+      <div class="kicker" id="s5k">Commander, c’est simple</div>
+      <h2 id="s5h" style="margin-top:26px">Choisissez.<br>Écrivez-nous.<br><i>C’est à vous.</i></h2>
+      <div class="lead" id="s5l">Choisissez vos pièces et commandez<br>simplement sur WhatsApp.</div>
+    </div>
+    <div class="abs" id="chat">
+      <div class="hd"><div class="av">FS</div><div><div class="hn">Fatim Style</div><div class="hs">en ligne</div></div></div>
+      <div class="body">
+        <div class="bub" id="b1" style="top:40px"><div class="im"><img class="cover" src="assets/jean_rose.jpg" style="object-position:50% 25%" alt=""></div><div class="t1">Robe chemise en jean rose</div><div class="t2">14 000 F CFA</div></div>
+        <div class="bub2" id="b2" style="top:520px">Bonjour ! Je souhaite commander cette robe.<div class="tick">✓✓</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 OUTRO -->
+  <section class="scene" id="s6">
+    <div class="abs arch2" id="arch2"></div>
+    <div class="abs nm" id="onm">FATIM STYLE</div>
+    <div class="abs tg" id="otg">L’élégance au quotidien</div>
+    <div class="abs cta" id="octa"><div><svg width="40" height="40" viewBox="0 0 24 24" fill="#231A1D"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Commandez sur WhatsApp</div></div>
+    <div class="abs url" id="ourl">fatimstyle.netlify.app</div>
+  </section>
+
+  <div class="curtain" id="curtain"><div id="c1"></div><div id="c2"></div></div>
+  <div id="fade"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const P=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const eOut=p=>1-Math.pow(1-p,3), eOut5=p=>1-Math.pow(1-p,5), eIn=p=>p*p*p;
+const eIO=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const eBack=p=>{const c1=1.4,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2)};
+const css=(el,o)=>{for(const k in o) el.style[k]=o[k]};
+const IMG=n=>`assets/${n}.jpg`;
+const fade=(el,q,dy=40)=>css(el,{opacity:q,transform:`translateY(${lerp(dy,0,q)}px)`});
+
+/* build */
+'FATIM STYLE'.split('').forEach(c=>{const s=document.createElement('span');s.innerHTML=c===' '?'&nbsp;':c;$('#bname').appendChild(s)});
+const STRIP=['jean_rose','ens_marron_1','plissee_orange','survet_3','maxi_jean','chemise_roi','ens_rose_1','robe_chemise_rayee','jean_relief','ens_vert_1','maxi_motifs','chemise_ciel','plissee_rose','jean_brodee','body_coloris','jean_bleu'];
+$('#row').innerHTML=STRIP.map(n=>`<div class="tile"><img class="cover" src="${IMG(n)}" style="object-position:50% 25%"></div>`).join('');
+
+const PRODUCTS=[
+  {k:'Nos nouveautés',h:'Plissé<br>&amp; <i>fluide</i>',d:'Robe longue plissée, bretelles fleuries.<br>Trois coloris.',dots:['#B9B23A','#F4F1EC','#F2491E'],
+   cards:[{img:'plissees_trio',wide:true,nm:'Robe longue plissée — olive, blanche, orange',pr:'8 000 F CFA',pos:'50% 30%'}]},
+  {k:'Robes en jean',h:'Le jean,<br><i>tout en douceur</i>',d:'La robe chemise boutonnée,<br>en rose ou en bleu.',dots:['#D99BB8','#2F5E9E'],
+   cards:[{img:'jean_rose',nm:'Robe chemise en jean rose',pr:'14 000 F CFA',pos:'50% 30%'},{img:'jean_bleu',nm:'Robe chemise en jean bleu',pr:'14 000 F CFA',pos:'50% 30%'}]},
+  {k:'Robes en jean',h:'Fleurs<br>en <i>relief</i>',d:'Des détails brodés<br>pour un look unique.',dots:['#3D6A9E','#5B7FAF'],
+   cards:[{img:'jean_relief',nm:'Robe en jean fleurs en relief',pr:'14 000 F CFA',pos:'50% 35%'},{img:'jean_brodee',nm:'Robe en jean brodée de fleurs',pr:'12 000 F CFA',pos:'50% 35%'}]},
+  {k:'Chemises',h:'Rayures<br><i>de saison</i>',d:'La chemise rayée oversize,<br>bleu roi ou bleu ciel.',dots:['#2E5DB8','#9CC0E8'],
+   cards:[{img:'chemise_roi',nm:'Chemise rayée bleu roi',pr:'8 000 F CFA',pos:'50% 40%'},{img:'chemise_ciel',nm:'Chemise rayée bleu ciel',pr:'8 000 F CFA',pos:'50% 40%'}]},
+  {k:'Robes longues',h:'Esprit<br><i>romantique</i>',d:'Plissés légers et fleurs en relief,<br>pour toutes vos occasions.',dots:['#EBA0B4','#F2491E'],
+   cards:[{img:'plissee_rose',nm:'Robe longue fleurie rose plissée',pr:'8 000 F CFA',pos:'50% 40%'},{img:'plissee_orange',nm:'Robe longue plissée orange',pr:'8 000 F CFA',pos:'50% 30%'}]},
+];
+$('#prog').innerHTML=PRODUCTS.map(()=>'<i><b></b></i>').join('');
+
+const CATS=[
+  {n:'Robes longues',imgs:['maxi_jean','robe_chemise_rayee','maxi_motifs','plissee_orange']},
+  {n:'Ensembles',imgs:['ens_marron_1','survet_3','ens_rose_1','ens_vert_1']},
+  {n:'Robes fleuries',imgs:['maxi_rayees','jean_relief','plissee_rose','hero_bleue']},
+  {n:'Chaussures',imgs:['mules_cuir','mules_strass','sandales_coeur','claquettes']},
+];
+$('#chips').innerHTML=CATS.map(c=>`<div class="chip">${c.n}</div>`).join('');
+const TPOS=[[0,0],[465,0],[0,440],[465,440]];
+$('#tiles').innerHTML=TPOS.map(([x,y],i)=>`<div class="t" style="left:${x}px;top:${y}px"><img class="cover a"><img class="cover b"></div>`).join('');
+
+/* timeline */
+const SC=[['#s1',0,7.05],['#s2',6.95,15.05],['#s3',14.95,39.05],['#s4',38.95,49.05],['#s5',48.95,55.05],['#s6',54.95,60.1]];
+const CUTS=[7,15,39,49,55];
+let lastP=-1,lastC=-1;
+
+function curtain(t){
+  const c=CUTS.find(x=>Math.abs(t-x)<0.75); const el=$('#curtain');
+  if(c===undefined){el.style.visibility='hidden';return}
+  el.style.visibility='visible';
+  const p=P(t,c-0.75,c+0.75);
+  // two layered panels sweep upward: pink leads, dark follows
+  const y1=lerp(1080,-1080,eIO(clamp(p*1.0)));
+  const y2=lerp(1080,-1080,eIO(clamp(p*1.0-0.0)));
+  css($('#c1'),{transform:`translateY(${lerp(1080,-1080,eIO(clamp((p-0.0)/0.85)))}px)`});
+  css($('#c2'),{transform:`translateY(${lerp(1080,-1080,eIO(clamp((p-0.15)/0.85)))}px)`});
+}
+
+function render(t){
+  for(const [id,a,b] of SC) $(id).style.visibility=(t>=a&&t<b)?'visible':'hidden';
+  curtain(t);
+  if(t<7.05) intro(t);
+  if(t>=6.95&&t<15.05) collection(t-7);
+  if(t>=14.95&&t<39.05) products(t-15);
+  if(t>=38.95&&t<49.05) categories(t-39);
+  if(t>=48.95&&t<55.05) whatsapp(t-49);
+  if(t>=54.95) outro(t-55);
+  $('#fade').style.opacity=t<0.6?1-eOut(P(t,0,0.6)):P(t,59.2,60);
+}
+
+/* 1. INTRO 0–7 */
+function intro(t){
+  const name=$('#bname'), spans=name.querySelectorAll('span');
+  spans.forEach((s,i)=>{const q=eOut5(P(t,0.35+i*0.07,1.25+i*0.07));
+    css(s,{opacity:q,transform:`translateY(${lerp(50,0,q)}px)`,filter:`blur(${(1-q)*10}px)`});});
+  // name: centred big, then moves to left column
+  const mv=eIO(P(t,2.2,3.3));
+  const sc=lerp(1,0.66,mv), ls=lerp(lerp(40,22,eOut(P(t,0.3,2))),14,mv);
+  name.style.letterSpacing=ls+'px';
+  const w=name.offsetWidth;
+  css(name,{left:lerp(960-w/2,154,mv)+'px',top:lerp(470,410,mv)+'px',transform:`scale(${sc})`,transformOrigin:'left top'});
+  // arch
+  const L=2600; const a=eIO(P(t,2.6,4.2));
+  css($('#ap'),{strokeDasharray:L,strokeDashoffset:L*(1-a)});
+  const r=eOut5(P(t,2.9,4.1));
+  css($('#arch'),{clipPath:`inset(${(1-r)*100}% 0 0 0)`});
+  css($('#arch img'),{transform:`scale(${1.18-0.12*P(t,2.9,7)})`});
+  fade($('#s1 .kicker'),eOut(P(t,3.1,3.8)),20);
+  const tg=eOut5(P(t,3.4,4.3));
+  css($('#tagline'),{opacity:tg,transform:`translateY(${lerp(40,0,tg)}px)`});
+  css($('#s1 .rule'),{transform:`scaleX(${eOut5(P(t,3.9,4.8))})`});
+  fade($('#sub1'),eOut(P(t,4.3,5.1)),20);
+  // gentle drift out
+  const ex=eIn(P(t,6.0,7));
+  css($('#s1'),{transform:`scale(${1+ex*0.05})`});
+}
+
+/* 2. COLLECTION 7–15 */
+function collection(u){
+  const L=eOut5(P(u,0.3,1.4));
+  css($('#s2 .left'),{clipPath:`inset(0 ${(1-L)*100}% 0 0)`});
+  css($('#s2img'),{transform:`scale(${1.15-0.1*P(u,0,4.2)})`});
+  fade($('#s2k'),eOut5(P(u,0.6,1.3)),20);
+  fade($('#s2h'),eOut5(P(u,0.8,1.6)),50);
+  $('#cats').querySelectorAll('div').forEach((d,i)=>{const q=eOut5(P(u,1.4+i*0.18,2.1+i*0.18));
+    css(d,{opacity:q,transform:`translateX(${lerp(-40,0,q)}px)`}); d.querySelector('b').style.transform=`scaleX(${q})`;});
+  // strip slides up over at 3.8
+  const s=eIO(P(u,3.6,4.5));
+  css($('#strip'),{transform:`translateY(${lerp(1080,0,s)}px)`});
+  const row=$('#row');
+  const x=lerp(200,-2900,P(u,3.6,8.2));
+  css(row,{transform:`translateX(${x}px)`});
+  row.querySelectorAll('.tile').forEach((tl,i)=>{const q=eOut5(P(u,4.0+i*0.05,4.8+i*0.05));css(tl,{transform:`translateY(${lerp(120,0,q)}px)`,opacity:q});});
+  fade($('#sth'),eOut5(P(u,4.4,5.2)),40);
+  fade($('#stk'),eOut5(P(u,4.8,5.5)),20);
+}
+
+/* 3. PRODUCTS 15–39 : 5 × 4.8 s */
+function products(u){
+  const D=4.8, i=clamp(Math.floor(u/D),0,PRODUCTS.length-1), p=PRODUCTS[i], v=u-i*D;
+  if(i!==lastP){
+    $('#pk').textContent=p.k; $('#ph').innerHTML=p.h; $('#pd').innerHTML=p.d;
+    $('#pdots').innerHTML=p.dots.map(c=>`<i style="background:${c}"></i>`).join('');
+    ['#cA','#cB'].forEach((id,j)=>{const c=p.cards[j],el=$(id);
+      if(!c){el.style.display='none';return}
+      el.style.display='block'; el.classList.toggle('wide',!!c.wide);
+      const im=el.querySelector('img'); im.src=IMG(c.img); im.style.objectPosition=c.pos;
+      el.querySelector('.nm').textContent=c.nm; el.querySelector('.pr').textContent=c.pr;});
+    lastP=i;
+  }
+  const out=eIn(P(v,4.25,4.8));
+  // title column
+  fade($('#pk'),eOut5(P(v,0.2,0.8))*(1-out),20);
+  const hq=eOut5(P(v,0.3,1.1));
+  css($('#ph'),{opacity:hq*(1-out),transform:`translateY(${lerp(60,0,hq)-out*30}px)`,clipPath:`inset(0 0 ${(1-hq)*100}% 0)`});
+  fade($('#pd'),eOut5(P(v,0.6,1.3))*(1-out),24);
+  $('#pdots').querySelectorAll('i').forEach((d,k)=>{const q=eBack(P(v,0.9+k*0.1,1.4+k*0.1));css(d,{transform:`scale(${q*(1-out)})`});});
+  // cards
+  ['#cA','#cB'].forEach((id,j)=>{
+    const el=$(id), c=p.cards[j]; if(!c) return;
+    const x=c.wide?850:(850+j*490);
+    const q=eOut5(P(v,0.15+j*0.15,1.05+j*0.15));
+    css(el,{left:x+'px',opacity:clamp(q*1.4)*(1-out),transform:`translateY(${lerp(140,0,q)-out*60}px)`});
+    const ph=el.querySelector('.ph'), im=el.querySelector('img');
+    css(ph,{clipPath:`inset(${(1-q)*100}% 0 0 0 round 30px)`});
+    css(im,{transform:`scale(${1.16-0.1*P(v,0,4.8)})`});
+    const tq=eOut5(P(v,0.6+j*0.15,1.2+j*0.15));
+    fade(el.querySelector('.nm'),tq,16); fade(el.querySelector('.pr'),tq,16);
+    // add-to-bag tap on first card
+    const pl=el.querySelector('.plus');
+    const pop=eBack(P(v,0.9+j*0.15,1.4+j*0.15));
+    const tap=j===0?P(v,2.6,2.9):0, press=Math.sin(tap*Math.PI);
+    css(pl,{transform:`scale(${pop*(1-0.12*press)})`});
+    const filled=j===0&&v>=2.75;
+    css(pl.querySelector('.fill'),{transform:`scale(${filled?eOut(P(v,2.75,3.05)):0})`});
+    pl.querySelector('svg').style.stroke=filled?'#231A1D':'#E7A6BD';
+  });
+  // bag badge
+  const n=i+(v>=2.9?1:0); $('#badge').textContent=n;
+  const bump=Math.sin(P(v,2.9,3.3)*Math.PI);
+  css($('#badge'),{opacity:n>0?1:0,transform:`scale(${n>0?1+0.3*bump:0})`});
+  css($('#bag'),{transform:`rotate(${bump*-10}deg)`});
+  css($('#topbar'),{transform:`translateY(${(1-eOut5(P(u,0,0.9)))*-130}px)`});
+  document.querySelectorAll('#prog b').forEach((b,k)=>{b.style.width=(k<i?100:k===i?P(v,0,D)*100:0)+'%'});
+}
+
+/* 4. CATEGORIES 39–49 : 4 × 2.5 s */
+function categories(u){
+  const hq=eOut5(P(u,0.2,1.0)); fade($('#s4h'),hq,50);
+  const D=2.5, i=clamp(Math.floor(u/D),0,3), v=u-i*D;
+  $('#chips').querySelectorAll('.chip').forEach((c,k)=>{
+    const q=eOut5(P(u,0.5+k*0.12,1.1+k*0.12));
+    c.classList.toggle('on',k===i);
+    css(c,{opacity:q,transform:`translateX(${lerp(-60,0,q)+(k===i?24*eOut5(P(v,0,0.4)):0)}px)`});});
+  if(i!==lastC){
+    document.querySelectorAll('#tiles .t').forEach((t,k)=>{const a=t.querySelector('.a'),b=t.querySelector('.b');
+      a.src=i>0?IMG(CATS[i-1].imgs[k]):''; b.src=IMG(CATS[i].imgs[k]); b.style.objectPosition='50% 30%'; a.style.objectPosition='50% 30%';});
+    lastC=i;
+  }
+  document.querySelectorAll('#tiles .t').forEach((t,k)=>{
+    const a=t.querySelector('.a'), b=t.querySelector('.b');
+    const q=eOut5(P(v,0.05+k*0.09,0.85+k*0.09));
+    if(i===0){ css(t,{opacity:clamp(q*1.5),transform:`translateY(${lerp(80,0,q)}px)`}); }
+    else css(t,{opacity:1,transform:'none'});
+    a.style.display=i===0?'none':'block';
+    css(b,{clipPath:`inset(${k%2?0:(1-q)*100}% 0 ${k%2?(1-q)*100:0}% 0)`,transform:`scale(${1.15-0.08*P(v,0,D)})`});
+    css(a,{transform:`scale(${1.07-0.03*q})`});
+  });
+}
+
+/* 5. WHATSAPP 49–55 */
+function whatsapp(u){
+  fade($('#s5k'),eOut5(P(u,0.2,0.8)),20);
+  const h=eOut5(P(u,0.35,1.2)); css($('#s5h'),{opacity:h,transform:`translateY(${lerp(60,0,h)}px)`});
+  fade($('#s5l'),eOut5(P(u,0.8,1.5)),24);
+  const c=eOut5(P(u,0.3,1.2));
+  css($('#chat'),{opacity:clamp(c*1.3),transform:`translateY(${lerp(160,0,c)}px)`});
+  const b1=eBack(P(u,1.4,2.0)), b2=eBack(P(u,2.4,3.0));
+  css($('#b1'),{opacity:clamp(b1),transform:`translateY(${lerp(40,0,clamp(b1))}px) scale(${0.9+0.1*clamp(b1)})`,transformOrigin:'right bottom'});
+  css($('#b2'),{opacity:clamp(b2),transform:`translateY(${lerp(40,0,clamp(b2))}px) scale(${0.9+0.1*clamp(b2)})`,transformOrigin:'right bottom'});
+}
+
+/* 6. OUTRO 55–60 */
+function outro(u){
+  const a=eIO(P(u,0.2,1.4));
+  css($('#arch2'),{clipPath:`inset(${(1-a)*100}% 0 0 0)`,transform:`scale(${0.96+0.04*a})`});
+  const n=eOut5(P(u,0.5,1.5));
+  css($('#onm'),{opacity:n,letterSpacing:lerp(40,18,n)+'px',filter:`blur(${(1-n)*8}px)`});
+  fade($('#otg'),eOut5(P(u,1.1,1.9)),30);
+  const c=eBack(P(u,1.6,2.2)); css($('#octa'),{opacity:clamp(c),transform:`scale(${0.85+0.15*clamp(c)})`});
+  fade($('#ourl'),eOut5(P(u,2.0,2.7)),16);
+}
+
+window.render=render;
+render(0);
+</script>
+</body>
+</html>
